@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class Deck {
 
@@ -28,14 +29,18 @@ public class Deck {
 	}
 	
 	public void SortDeck(){
-		Card switcher;
+		System.Random rand = new System.Random();
+		Array.Sort<Card>(cards, delegate(Card x, Card y) {
+			return (x.Equals(y))?0:rand.Next(-1, 2);
+		});
+		/*Card switcher;
 		int random;
 		for(int i = 0; i<cards.Length; i++){
 			random = Random.Range (0,51);
 			switcher = cards[i];
 			cards[i] = cards[random];
 			cards[random] = switcher;
-		}
+		}*/
 	}
 	
 	public Card DrawCard(){

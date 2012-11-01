@@ -6,10 +6,12 @@ public class Spot: ScriptableObject {
 	int id;
 	GameObject cardOne;
 	GameObject cardTwo;
+	tk2dAnimatedSprite as1;
+	tk2dAnimatedSprite as2;
 	Vector3 positionOne;
 	Vector3 positionTwo;
 	bool active = false;
-	Player player;
+	Player player = new Player();
 
 	public bool Active {
 		get {
@@ -37,38 +39,44 @@ public class Spot: ScriptableObject {
 			positionTwo = value;
 		}
 	}	
-	// Use this for initialization
-	void OnEnable () {
-		cardOne = (GameObject)Resources.Load("CardPrefab");
-		cardTwo = (GameObject)Resources.Load("CardPrefab");
-	}
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
 	
-	public void SetCardOne(string cardName){
-		tk2dAnimatedSprite card = cardOne.GetComponent<tk2dAnimatedSprite>();
-		card.Play (cardName);
+	public void SetCardOne(Card card){
+		player.SetCard1(card);
+		as1.Play(card.GetStringName());
 	}
 	
-	public void SetCardTwo(string cardName){
-		tk2dAnimatedSprite card = cardTwo.GetComponent<tk2dAnimatedSprite>();
-		card.Play (cardName);
+	public void SetCardTwo(Card card){
+		player.SetCard2(card);
+		as2.Play(card.GetStringName());
 	}
 	
-	public void SetCards(string cardOneName, string cardTwoName){
-		this.cardOne = Resources.Load("CardPrefab") as GameObject;
-		this.cardTwo = Resources.Load("CardPrefab") as GameObject;
-		tk2dAnimatedSprite cardOne = this.cardOne.GetComponent<tk2dAnimatedSprite>();
-		cardOne.Play (cardOneName);
-		tk2dAnimatedSprite cardTwo = this.cardTwo.GetComponent<tk2dAnimatedSprite>();
-		cardTwo.Play (cardTwoName);
+	public void SetCards(Card card1, Card card2){
+		SetCardOne(card1);
+		SetCardTwo(card2);
 	}
 	
-	public void InstantiateCards(){
-		Instantiate(cardOne, Vector3.zero, Quaternion.identity);
-		Instantiate(cardTwo, Vector3.zero, Quaternion.identity);
+	public void InstantiateCards(GameObject prefab){
+		cardOne = Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
+		cardTwo = Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
+		as1 = cardOne.GetComponent<tk2dAnimatedSprite>();
+		as2 = cardTwo.GetComponent<tk2dAnimatedSprite>();
+	}
+	
+	public void Card1Ubication(){
+		cardOne.transform.position = this.positionOne;
+	}
+	
+	public void Card2Ubication(){
+		cardTwo.transform.position = this.positionTwo;
+	}
+	
+	public void CardsUbication(){
+		Card1Ubication();
+		Card2Ubication();
 	}
 }

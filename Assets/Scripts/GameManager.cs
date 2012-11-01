@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
 	float currentBet;
 	float minimum;
 	Spot[] spots = new Spot[6];
+	public GameObject cardPrefab;
 
 	public float CurrentBet {
 		get {
@@ -26,10 +27,12 @@ public class GameManager : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		//deck = new Deck();
 		pot = 0;
 		currentBet = 0;
-		spots[0] = ScriptableObject.CreateInstance<Spot>();
+		for(int i =0; i< spots.Length; i++){
+			spots[i] = ScriptableObject.CreateInstance<Spot>();
+			spots[i].InstantiateCards(cardPrefab);
+		}
 		spots[0].PositionOne = new Vector3(-0.15f, 0.25f, 0f);
 		spots[0].PositionTwo =new Vector3(0.15f, 0.25f, 0f);
 		//spots[1].PositionOne = new Vector3(1.13f, 1.75f, 0f);
@@ -59,6 +62,10 @@ public class GameManager : MonoBehaviour {
 	
 	public void StartMatch(){
 		deck.InitializeDeck ();
-		spots[0].SetCards(deck.DrawCard().GetStringName(), deck.DrawCard().GetStringName());
+		deck.SortDeck();
+		Card card1 = deck.DrawCard();
+		Card card2 = deck.DrawCard();
+		spots[0].SetCards(card1, card2);
+		spots[0].CardsUbication();
 	}
 }
